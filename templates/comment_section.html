@@ -1,0 +1,7 @@
+<ul class='commentslist'>
+	{% for comment in comment_list %}
+		<li><strong>{{ comment.author_name }}</strong></li>
+		<li>{{ comment.comment_text }}</li>
+		<hr>
+	{% endfor %}
+</ul>

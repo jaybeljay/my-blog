@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}
+	Tag Search - {{ tag.title }}
+{% endblock %}
+
+{% block content %}
+	<h1 class='mb-5'><span>Posts with {{ tag.title }} tag:</span></h1>
+	<div class="row mb-2">
+	{% for post in tag.posts.all %}
+		<div class="col-md-6">
+			<div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+				<div class="col p-4 d-flex flex-column position-static">
+					<h3 class="mb-0">{{ post.title }}</h3>
+					<div class="mb-1 text-muted">{{ post.pub_date }}</div>
+					<p class="card-text mb-auto">{{ post.intro }}</p>
+					<div class="card-footer bg-transparent post-bottom">
+						<ul class="post-stats">
+							<a href="{{ post.get_absolute_url }}" class="btn btn-sm btn-outline-secondary">Read</a>
+							<li><i class="icon-up text-muted"></i>
+								{{ post.rate }}
+								<i class="icon-down text-muted"></i>
+							</li>
+							<li>
+								<i class="icon-eye text-muted"></i>
+								{{ post.views }}
+							</li>
+							<li>
+								<i class="icon-tag text-muted"></i>
+								{% for tag in post.tags.all %}
+									<a href="{{ tag.get_absolute_url }}">{{ tag.title }}</a>
+								{% endfor %}
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-auto d-none d-lg-block">
+					<svg class="bd-placeholder-img" width="200" height="250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
+						<title>Placeholder</title>
+						<rect width="100%" height="100%" fill="#55595c"></rect>
+						<text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
+					</svg>
+				</div>
+			</div>
+		</div>
+	{% endfor %}
+	</div>
+{% endblock %}
