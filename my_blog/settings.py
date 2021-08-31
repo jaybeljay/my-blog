@@ -55,11 +55,16 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'my_blog.urls'
 
+TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
+FOLLOWER_TEMP_DIR = os.path.join(BASE_DIR, 'templates/follower')
+POST_TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates/post')
+TAG_TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates/tag')
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR, 'templates')
+            TEMPLATES_DIR, FOLLOWER_TEMP_DIR, POST_TEMPLATES_DIR, TAG_TEMPLATES_DIR
         ],
         'APP_DIRS': True,
         'OPTIONS': {

@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load hitcount_tags %}
+
+{% block title %}
+	BelBlog - {{ block.super }}
+{% endblock %}
+
+{% block content %}
+	<div class="jumbotron p-4 p-md-5 text-white rounded bg-dark">
+		<div class="col-md-6 px-0">
+			{% if top_post %}
+				<h1 class="display-4 font-italic">{{ top_post.title }}</h1>
+				<p class="lead my-3">{{ top_post.intro }}</p>
+				<a href="{{ top_post.get_absolute_url }}" class='btn btn-light'>Read</a>
+			{% else %}
+				<h1 class="display-4 font-italic">Title of a trending blog post</h1>
+				<p class="lead my-3">Multiple lines of text that form the lede, informing new readers quickly and efficiently about what’s most interesting in this post’s contents.</p>
+				<a href="{{ post.get_absolute_url }}" class='btn btn-light'>Read</a>
+			{% endif %}
+		</div>
+	</div>
+	<div class="row mb-2">
+		{% for post in posts %}
+			<div class="col-md-6">
+				<div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+					<div class="col p-4 d-flex flex-column position-static">
+						<h3 class="mb-0">{{ post.title }}</h3>
+						<div class="mb-1 text-muted">{{ post.pub_date }}</div>
+						<p class="card-text mb-auto">{{ post.intro }}</p>
+					</div>
+					<div class="col-auto d-none d-lg-block">
+							<svg class="bd-placeholder-img" width="200" height="250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
+								<title>Placeholder</title>
+								<rect width="100%" height="100%" fill="#55595c"></rect>
+								<text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
+							</svg>
+						</div>
+						<div class="card-footer bg-transparent post-bottom">
+							<ul class="post-stats" style="padding-bottom: 12px; padding-left: 12px;">
+								<a href="{{ post.get_absolute_url }}" class="btn btn-sm btn-outline-secondary">Read</a>
+								<li><i class="icon-up text-muted"></i>
+									<div class="rating" style="display: inline;">{{ post.votes.rating }}</div>
+									<i class="icon-down text-muted"></i>
+								</li>
+								<li>
+									<i class="icon-eye text-muted"></i>
+									{% get_hit_count for post %}
+								</li>
+								<li>
+									<i class="icon-comment text-muted"></i>
+									{{ post.comments.count|default:'0' }}
+								</li>
+								<li>
+									<i class="icon-tag text-muted"></i>
+									{% for tag in post.tags.all %}
+										<a href="{{ tag.get_absolute_url }}">{{ tag.title }}</a>
+									{% endfor %}
+								</li>
+							</ul>
+						</div>
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+	{% if is_paginated %}
+		<nav aria-label="..." style='margin-left: 20px;'>
+		  <ul class="pagination">
+			<li class="page-item {% if not prev_url %} disabled {% endif %}">
+			  <a class="page-link" href="{{ prev_url }}">Previous</a>
+			</li>
+			{% for n in posts.paginator.page_range %}
+				{% if posts.number == n %}
+					<li class="page-item active">
+					  <a class="page-link" href="?page={{ n }}">{{ n }}</a>
+					</li>
+				{% elif n > posts.number|add:-3 and n < posts.number|add:3 %}
+					<li class="page-item">
+					  <a class="page-link" href="?page={{ n }}">{{ n }}</a>
+					</li>
+				{% endif %}
+			{% endfor %}
+			<li class="page-item {% if not next_url %} disabled {% endif %}">
+			  <a class="page-link" href="{{ next_url }}">Next</a>
+			</li>
+		  </ul>
+		</nav>
+	{% endif %}
+	<div class="p-4 justify-content-center">
+		<h4 class="font-italic">Elsewhere</h4>
+			<a href='#'><img alt='Facebook' src="{% static 'img/facebook-icon.png' %}"/></a>
+			<a href='#'><img alt='VK' src="{% static 'img/vk-icon.png' %}"/></a>
+			<a href='#'><img alt='Instagram' src= "{% static 'img/inst-icon.png' %}"/></a>
+	</div>
+{% endblock %}
